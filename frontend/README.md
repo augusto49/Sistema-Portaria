@@ -39,31 +39,7 @@ Antes de começar, certifique-se de ter instalado:
 
 ### 🗄️ 1. Configurar Banco de Dados
 
-Você tem duas opções para configurar o PostgreSQL:
-
-#### Opção A: Docker Compose (Recomendado) 🐳
-
-Se você tem Docker instalado, esta é a forma mais rápida:
-
-```bash
-# Na raiz do projeto, execute:
-docker-compose up -d
-```
-
-Isso irá:
-
-- ✅ Criar um container PostgreSQL
-- ✅ Configurar automaticamente usuário, senha e database
-- ✅ Expor na porta 5432
-- ✅ Persistir dados no volume `postgres_data`
-
-Para parar o container:
-
-```bash
-docker-compose down
-```
-
-#### Opção B: PostgreSQL Local 💻
+#### PostgreSQL Local 💻
 
 Se você já tem PostgreSQL instalado localmente:
 
@@ -89,8 +65,7 @@ cd backend
 npm install
 
 # 3. Configure as variáveis de ambiente
-# Copie o arquivo de exemplo e ajuste se necessário
-cp .env.example .env
+cp .env
 
 # 4. Execute as migrations do Prisma
 # Isso cria todas as tabelas no banco de dados

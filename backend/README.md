@@ -19,14 +19,7 @@ npm install
 
 ## ⚙️ Configuração
 
-1. **PostgreSQL com Docker**
-
-```bash
-# Na raiz do projeto
-docker-compose up -d
-```
-
-2. **Variáveis de Ambiente**
+1. **Variáveis de Ambiente**
 
 Configure `.env`:
 
@@ -36,7 +29,7 @@ PORT=3001
 NODE_ENV=development
 ```
 
-3. **Executar Migrations**
+2. **Executar Migrations**
 
 ```bash
 npm run prisma:generate
