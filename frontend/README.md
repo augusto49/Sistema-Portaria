@@ -424,8 +424,6 @@ Cadastro de feriados
 - `Acesso` → `Agendamento` (N:1, opcional)
 - `SalaResponsavel` → `Sala` (N:1)
 
-## 📁 Estrutura do Projeto
-
 ## 📄 Licença
 
 Este projeto está sob a licença MIT.
