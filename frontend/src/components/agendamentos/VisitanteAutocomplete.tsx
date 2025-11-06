@@ -25,6 +25,7 @@ interface VisitanteAutocompleteProps {
   onCreateNew?: () => void;
 }
 
+// Componente de Autocomplete para Seleção de Visitante
 export default function VisitanteAutocomplete({
   value,
   onChange,

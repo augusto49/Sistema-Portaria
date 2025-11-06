@@ -37,6 +37,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+// Componente de Acessos Ativos com Registro de Entrada/Saída
 export function AcessosAtivosComRegistro() {
   const { data: acessos, isLoading: isLoadingAcessos } = useAcessosAtivos();
   const { data: salas } = useSalas();
@@ -89,6 +90,7 @@ export function AcessosAtivosComRegistro() {
     }
   };
 
+  // Calcula a duração desde a entrada até Saida
   const calcularDuracao = (entrada: string) => {
     const agora = new Date();
     const entradaDate = new Date(entrada);

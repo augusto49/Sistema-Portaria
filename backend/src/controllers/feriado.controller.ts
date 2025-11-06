@@ -1,10 +1,9 @@
-// CONTROLE DE FERIADOS
-
 import { Request, Response } from "express";
 import prisma from "../utils/prisma";
 import { AppError } from "../middleware/errorHandler";
 import { parseLocalDate } from "../utils/dateUtils";
 
+// Lista todos os feriados
 export const getFeriados = async (req: Request, res: Response) => {
   const feriados = await prisma.feriado.findMany({
     where: { ativo: true },
@@ -13,6 +12,7 @@ export const getFeriados = async (req: Request, res: Response) => {
   res.json(feriados);
 };
 
+// Lista feriados em um período
 export const getFeriadosByPeriodo = async (req: Request, res: Response) => {
   const { inicio, fim } = req.query;
 
@@ -29,6 +29,7 @@ export const getFeriadosByPeriodo = async (req: Request, res: Response) => {
   res.json(feriados);
 };
 
+// Cria novo feriado
 export const createFeriado = async (req: Request, res: Response) => {
   const { data, descricao, tipo } = req.body;
 
@@ -54,6 +55,7 @@ export const createFeriado = async (req: Request, res: Response) => {
   res.status(201).json(feriado);
 };
 
+// Atualiza feriado
 export const updateFeriado = async (req: Request, res: Response) => {
   const { id } = req.params;
   const { data, descricao, tipo } = req.body;
@@ -84,6 +86,7 @@ export const updateFeriado = async (req: Request, res: Response) => {
   res.json(feriado);
 };
 
+// Deleta (inativa) feriado
 export const deleteFeriado = async (req: Request, res: Response) => {
   const { id } = req.params;
   await prisma.feriado.update({

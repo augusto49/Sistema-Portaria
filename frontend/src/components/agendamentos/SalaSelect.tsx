@@ -28,6 +28,7 @@ export default function SalaSelect({
 }: SalaSelectProps) {
   const { data: salas = [], isLoading } = useSalas();
 
+  // Verifica se a sala está disponível na data selecionada
   const isSalaDisponivel = (sala: any) => {
     if (!selectedDate) return true;
 
@@ -40,6 +41,7 @@ export default function SalaSelect({
     return horarios && horarios.length > 0;
   };
 
+  // Obtém os horários de funcionamento da sala na data selecionada
   const getHorariosFuncionamento = (sala: any) => {
     if (!selectedDate) return null;
 
@@ -54,6 +56,7 @@ export default function SalaSelect({
     return horarios.map((h: any) => `${h.inicio} - ${h.fim}`).join(", ");
   };
 
+  // Obtém o responsável atual da sala
   const getResponsavelAtual = (sala: any) => {
     if (!sala.sala_responsavel || sala.sala_responsavel.length === 0)
       return null;

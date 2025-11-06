@@ -1,5 +1,3 @@
-// SERVIÇO DE SLOTS DISPONÍVEIS
-
 import prisma from "../utils/prisma";
 import { format, parse, addMinutes, isWithinInterval } from "date-fns";
 import {

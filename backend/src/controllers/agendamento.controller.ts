@@ -1,5 +1,3 @@
-// CONTROLER DE AGENDAMENTOS
-
 import { Request, Response } from "express";
 import prisma from "../utils/prisma";
 import { StatusAgendamento } from "../types/database.types";
@@ -40,6 +38,7 @@ export const getAgendamentosByVisitante = async (
   res.json(agendamentos);
 };
 
+// Filtra agendamentos por sala
 export const getAgendamentosBySala = async (req: Request, res: Response) => {
   const { salaId } = req.params;
   const agendamentos = await prisma.agendamento.findMany({
@@ -53,6 +52,7 @@ export const getAgendamentosBySala = async (req: Request, res: Response) => {
   res.json(agendamentos);
 };
 
+// Lista agendamentos em um período
 export const getAgendamentosByData = async (req: Request, res: Response) => {
   const { dataInicio, dataFim } = req.query;
 
@@ -73,6 +73,7 @@ export const getAgendamentosByData = async (req: Request, res: Response) => {
   res.json(agendamentos);
 };
 
+// Lista agendamentos pendentes
 export const getAgendamentosPendentes = async (req: Request, res: Response) => {
   const agendamentos = await prisma.agendamento.findMany({
     where: {

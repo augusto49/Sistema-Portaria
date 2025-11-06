@@ -85,6 +85,7 @@ export function useCreateVisitante() {
   });
 }
 
+// Atualiza visitante
 export function useUpdateVisitante() {
   const queryClient = useQueryClient();
 
@@ -121,6 +122,7 @@ export function useUpdateVisitante() {
   });
 }
 
+// Deleta visitante
 export function useDeleteVisitante() {
   const queryClient = useQueryClient();
 

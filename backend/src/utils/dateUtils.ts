@@ -1,5 +1,3 @@
-// CONVERSÕES DE DATA UTC/LOCAL
-
 // Converte string YYYY-MM-DD para Date (midnight local)
 export const parseLocalDate = (dateString: string): Date => {
   if (dateString.includes("T")) {
@@ -41,7 +39,7 @@ export const parseLocalDateTimeToUTCDate = (input: string): Date => {
       const [_, y, mo, d] = md;
       return new Date(Date.UTC(Number(y), Number(mo) - 1, Number(d), 0, 0, 0));
     }
-    // Último recurso
+
     const d = new Date(input);
     if (isNaN(d.getTime())) throw new Error("Data/hora inválida");
     return d;

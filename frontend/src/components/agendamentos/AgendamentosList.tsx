@@ -85,7 +85,7 @@ export default function AgendamentosList({
     return matchesSearch && matchesStatus;
   });
 
-  // Ordenar por criado_em (mais recente primeiro)
+  // Ordenar por criado_em
   const sortedAgendamentos = [...filteredAgendamentos].sort(
     (a, b) => new Date(b.criado_em).getTime() - new Date(a.criado_em).getTime()
   );
@@ -107,6 +107,7 @@ export default function AgendamentosList({
     }
   }, [totalPages, currentPage]);
 
+  // Confirmar Agendamento
   const handleConfirmar = async (agendamento: Agendamento) => {
     try {
       await createAcesso.mutateAsync({
@@ -125,6 +126,7 @@ export default function AgendamentosList({
     }
   };
 
+  // Registrar Entrada
   const handleRegistrarEntrada = async (agendamento: Agendamento) => {
     try {
       await createAcesso.mutateAsync({
@@ -143,6 +145,7 @@ export default function AgendamentosList({
     }
   };
 
+  // Registrar Saída
   const handleRegistrarSaida = async (agendamento: Agendamento) => {
     try {
       const { data: acesso } = await api.get(
@@ -162,6 +165,7 @@ export default function AgendamentosList({
     }
   };
 
+  // Cancelar Agendamento
   const handleCancelar = async () => {
     if (cancelingId) {
       // Atualizar para status 5 (Cancelado)

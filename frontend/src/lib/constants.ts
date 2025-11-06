@@ -1,5 +1,3 @@
-// CONSTANTES DO SISTEMA
-
 // Status de agendamentos
 export const STATUS_AGENDAMENTO = {
   1: { label: "PENDENTE", color: "bg-warning text-warning-foreground" },

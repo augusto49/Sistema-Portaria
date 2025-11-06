@@ -1,5 +1,3 @@
-// CONTROLER DE VISITANTES
-
 import { Request, Response } from "express";
 import prisma from "../utils/prisma";
 import { AppError } from "../middleware/errorHandler";

@@ -1,6 +1,3 @@
-// CÁLCULO DE PRIORIDADE
-// Níveis: 6=Idoso80+Def, 5=Idoso60+Def, 4=Def, 3=Idoso80+, 2=Idoso60+, 1=Normal
-
 import { differenceInYears } from "date-fns";
 
 interface CalcularPrioridadeParams {

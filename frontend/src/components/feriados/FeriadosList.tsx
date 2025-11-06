@@ -75,6 +75,7 @@ const getTipoVariant = (tipo: number): "default" | "secondary" | "outline" => {
   }
 };
 
+// Componente de Lista de Feriados
 export default function FeriadosList() {
   const { data: feriados, isLoading } = useFeriados();
   const deleteFeriado = useDeleteFeriado();

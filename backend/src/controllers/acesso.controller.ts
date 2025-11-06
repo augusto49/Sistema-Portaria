@@ -1,9 +1,8 @@
-// CONTROLE DE ENTRADA/SAÍDA
-
 import { Request, Response } from "express";
 import prisma from "../utils/prisma";
 import { AppError } from "../middleware/errorHandler";
 
+// Obtém todos os acessos
 export const getAcessos = async (req: Request, res: Response) => {
   const acessos = await prisma.acesso.findMany({
     where: { ativo: true },
@@ -17,6 +16,7 @@ export const getAcessos = async (req: Request, res: Response) => {
   res.json(acessos);
 };
 
+// Obtém acesso por ID
 export const getAcessosByVisitante = async (req: Request, res: Response) => {
   const { visitanteId } = req.params;
   const acessos = await prisma.acesso.findMany({
@@ -31,6 +31,7 @@ export const getAcessosByVisitante = async (req: Request, res: Response) => {
   res.json(acessos);
 };
 
+// Obtém acessos por sala
 export const getAcessosBySala = async (req: Request, res: Response) => {
   const { salaId } = req.params;
   const acessos = await prisma.acesso.findMany({
@@ -45,6 +46,7 @@ export const getAcessosBySala = async (req: Request, res: Response) => {
   res.json(acessos);
 };
 
+// Lista acessos em um período
 export const getAcessosByPeriodo = async (req: Request, res: Response) => {
   const { dataInicio, dataFim } = req.query;
 
@@ -83,6 +85,7 @@ export const getAcessosAtivos = async (req: Request, res: Response) => {
   res.json(acessos);
 };
 
+// Obtém acesso por agendamento
 export const getAcessoByAgendamento = async (req: Request, res: Response) => {
   const { agendamentoId } = req.params;
   const acesso = await prisma.acesso.findFirst({

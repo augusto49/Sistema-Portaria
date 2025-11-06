@@ -44,6 +44,7 @@ interface SalaFormProps {
   salaId?: number;
 }
 
+// Componente de Formulário para Criação/Edição de Sala
 export function SalaForm({ open, onClose, salaId }: SalaFormProps) {
   const isEditing = !!salaId;
   const { data: sala } = useSalaById(salaId);

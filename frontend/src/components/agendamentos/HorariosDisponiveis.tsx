@@ -82,7 +82,6 @@ export default function HorariosDisponiveis({
     });
 
     if (selectingStart) {
-      // Primeiro clique: define início
       console.log("✅ [Slot] Definindo horário de INÍCIO:", slot.horario);
       const [h, m] = slot.horario.split(":");
       const endH = String(parseInt(h, 10) + 1).padStart(2, "0"); // 1h por slot
@@ -97,7 +96,6 @@ export default function HorariosDisponiveis({
       onSelectHorario(inicioLocal, fimLocal);
       setSelectingStart(false);
     } else {
-      // Segundo clique: define fim
       if (selectedInicio && slot.horario) {
         console.log("✅ [Slot] Definindo horário de FIM:", slot.horario);
         const [h, m] = slot.horario.split(":");
@@ -189,7 +187,7 @@ export default function HorariosDisponiveis({
                   size="sm"
                   className="bg-white dark:bg-gray-800"
                   onClick={() => {
-                    // Criar data no timezone local, sem conversão UTC
+                    // Criar data no timezone local
                     const [ano, mes, dia] =
                       buscarHorarios.data.sugestao.data.split("-");
                     const novaData = new Date(

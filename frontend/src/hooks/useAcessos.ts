@@ -1,33 +1,38 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import api from '@/lib/api';
-import { Acesso } from '@/types/database';
-import { toast } from '@/hooks/use-toast';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import api from "@/lib/api";
+import { Acesso } from "@/types/database";
+import { toast } from "@/hooks/use-toast";
 
+// Hook para Gerenciar Acessos
 export function useAcessos() {
   return useQuery({
-    queryKey: ['acessos'],
+    queryKey: ["acessos"],
     queryFn: async () => {
-      const { data } = await api.get<Acesso[]>('/acessos');
+      const { data } = await api.get<Acesso[]>("/acessos");
       return data;
     },
   });
 }
 
+// Hook para Obter Acessos por Visitante
 export function useAcessosByVisitante(visitanteId: number | undefined) {
   return useQuery({
-    queryKey: ['acessos', 'visitante', visitanteId],
+    queryKey: ["acessos", "visitante", visitanteId],
     queryFn: async () => {
       if (!visitanteId) return [];
-      const { data } = await api.get<Acesso[]>(`/acessos/visitante/${visitanteId}`);
+      const { data } = await api.get<Acesso[]>(
+        `/acessos/visitante/${visitanteId}`
+      );
       return data;
     },
     enabled: !!visitanteId,
   });
 }
 
+// Hook para Obter Acessos por Sala
 export function useAcessosBySala(salaId: number | undefined) {
   return useQuery({
-    queryKey: ['acessos', 'sala', salaId],
+    queryKey: ["acessos", "sala", salaId],
     queryFn: async () => {
       if (!salaId) return [];
       const { data } = await api.get<Acesso[]>(`/acessos/sala/${salaId}`);
@@ -37,14 +42,15 @@ export function useAcessosBySala(salaId: number | undefined) {
   });
 }
 
+// Hook para Obter Acessos por Período
 export function useAcessosByPeriodo(dataInicio?: string, dataFim?: string) {
   return useQuery({
-    queryKey: ['acessos', 'periodo', dataInicio, dataFim],
+    queryKey: ["acessos", "periodo", dataInicio, dataFim],
     queryFn: async () => {
       const params = new URLSearchParams();
-      if (dataInicio) params.append('dataInicio', dataInicio);
-      if (dataFim) params.append('dataFim', dataFim);
-      
+      if (dataInicio) params.append("dataInicio", dataInicio);
+      if (dataFim) params.append("dataFim", dataFim);
+
       const { data } = await api.get<Acesso[]>(`/acessos/periodo?${params}`);
       return data;
     },
@@ -52,19 +58,21 @@ export function useAcessosByPeriodo(dataInicio?: string, dataFim?: string) {
   });
 }
 
+// Hook para Obter Acessos Ativos
 export function useAcessosAtivos() {
   return useQuery({
-    queryKey: ['acessos', 'ativos'],
+    queryKey: ["acessos", "ativos"],
     queryFn: async () => {
-      const { data } = await api.get<Acesso[]>('/acessos/ativos');
+      const { data } = await api.get<Acesso[]>("/acessos/ativos");
       return data;
     },
   });
 }
 
+// Hook para Obter Acesso por Agendamento
 export function useAcessoByAgendamento(agendamentoId: number | undefined) {
   return useQuery({
-    queryKey: ['acesso', 'agendamento', agendamentoId],
+    queryKey: ["acesso", "agendamento", agendamentoId],
     queryFn: async () => {
       if (!agendamentoId) return null;
       const { data } = await api.get(`/acessos/agendamento/${agendamentoId}`);
@@ -74,6 +82,7 @@ export function useAcessoByAgendamento(agendamentoId: number | undefined) {
   });
 }
 
+// Hook para Criar um Novo Acesso
 export function useCreateAcesso() {
   const queryClient = useQueryClient();
 
@@ -84,26 +93,27 @@ export function useCreateAcesso() {
       agendamento_id?: number;
       entrada_em?: string;
     }) => {
-      const { data } = await api.post<Acesso>('/acessos', acesso);
+      const { data } = await api.post<Acesso>("/acessos", acesso);
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['acessos'] });
+      queryClient.invalidateQueries({ queryKey: ["acessos"] });
       toast({
-        title: 'Sucesso',
-        description: 'Entrada registrada com sucesso!',
+        title: "Sucesso",
+        description: "Entrada registrada com sucesso!",
       });
     },
     onError: (error: Error) => {
       toast({
-        title: 'Erro',
+        title: "Erro",
         description: error.message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     },
   });
 }
 
+// Hook para Registrar Saída de um Acesso
 export function useRegistrarSaida() {
   const queryClient = useQueryClient();
 
@@ -113,17 +123,17 @@ export function useRegistrarSaida() {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['acessos'] });
+      queryClient.invalidateQueries({ queryKey: ["acessos"] });
       toast({
-        title: 'Sucesso',
-        description: 'Saída registrada com sucesso!',
+        title: "Sucesso",
+        description: "Saída registrada com sucesso!",
       });
     },
     onError: (error: Error) => {
       toast({
-        title: 'Erro',
+        title: "Erro",
         description: error.message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     },
   });

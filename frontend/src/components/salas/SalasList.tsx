@@ -59,6 +59,7 @@ const VARIACAO_LABELS: Record<number, string> = {
   4: "Mês",
 };
 
+// Componente para Listar e Gerenciar Salas
 export function SalasList({ onEdit }: SalasListProps) {
   const { data: salas = [], isLoading } = useSalas();
   const deleteSala = useDeleteSala();

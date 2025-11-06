@@ -30,6 +30,7 @@ interface HistoricoVisitanteProps {
   onClose: () => void;
 }
 
+// Componente para Exibir o Histórico de um Visitante
 export default function HistoricoVisitante({
   visitanteId,
   visitanteNome,

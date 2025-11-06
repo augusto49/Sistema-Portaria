@@ -29,6 +29,7 @@ interface ResponsavelHistoricoProps {
   onClose: () => void;
 }
 
+// Componente para Gerenciar o Histórico de Responsáveis pela Sala
 export function ResponsavelHistorico({
   salaId,
   open,

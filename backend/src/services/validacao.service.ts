@@ -1,5 +1,3 @@
-// VALIDAÇÃO DE AGENDAMENTOS
-
 import prisma from "../utils/prisma";
 import { parseLocalDateTimeToUTCDate } from "../utils/dateUtils";
 import { StatusAgendamento } from "../types/database.types";

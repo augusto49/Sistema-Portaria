@@ -26,11 +26,13 @@ const DIAS_SEMANA = [
   { key: "6", label: "Sáb", labelFull: "Sábado" },
 ];
 
+// Componente para Gerenciar Horários por Dia da Semana
 export function HorariosPorDia({ value, onChange }: HorariosPorDiaProps) {
   const [selectedDay, setSelectedDay] = useState<string>("1");
   const [horaInicio, setHoraInicio] = useState("08:00");
   const [horaFim, setHoraFim] = useState("17:00");
 
+  // Adiciona um novo horário ao dia selecionado
   const addHorario = () => {
     if (!selectedDay) {
       toast.error("Selecione um dia da semana");
@@ -58,6 +60,7 @@ export function HorariosPorDia({ value, onChange }: HorariosPorDiaProps) {
     toast.success("Horário adicionado");
   };
 
+  // Remove um horário do dia especificado pelo índice
   const removeHorario = (dia: string, index: number) => {
     const novosHorarios = {
       ...value,
@@ -67,18 +70,21 @@ export function HorariosPorDia({ value, onChange }: HorariosPorDiaProps) {
     toast.success("Horário removido");
   };
 
+  // Copia os horários do dia selecionado para todos os dias da semana
   const copiarParaTodos = () => {
     if (!selectedDay) {
       toast.error("Selecione um dia da semana");
       return;
     }
 
+    // Obtém os horários do dia selecionado
     const horariosDoDia = value[selectedDay] || [];
     if (horariosDoDia.length === 0) {
       toast.error("Adicione horários antes de copiar");
       return;
     }
 
+    // Copia os horários para todos os dias
     const novosHorarios: Record<string, Horario[]> = {};
     DIAS_SEMANA.forEach((d) => {
       novosHorarios[d.key] = [...horariosDoDia];
@@ -87,6 +93,7 @@ export function HorariosPorDia({ value, onChange }: HorariosPorDiaProps) {
     toast.success("Horários copiados para todos os dias");
   };
 
+  // Obtém os horários do dia atualmente selecionado
   const horariosDoSelecionado = value[selectedDay] || [];
   const diaLabelFull = DIAS_SEMANA.find(
     (d) => d.key === selectedDay

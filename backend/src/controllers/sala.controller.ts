@@ -1,8 +1,7 @@
-// CONTROLER DE SALAS
-
 import { Request, Response } from "express";
 import prisma from "../utils/prisma";
 
+// Lista todas as salas
 export const getSalas = async (req: Request, res: Response) => {
   const salas = await prisma.sala.findMany({
     where: { ativo: true },
@@ -22,6 +21,7 @@ export const getSalas = async (req: Request, res: Response) => {
   res.json(salas);
 };
 
+// Obtém sala por ID
 export const getSalaById = async (req: Request, res: Response) => {
   const { id } = req.params;
   const sala = await prisma.sala.findUnique({
@@ -36,6 +36,7 @@ export const getSalaById = async (req: Request, res: Response) => {
   res.json(sala);
 };
 
+// Cria nova sala
 export const createSala = async (req: Request, res: Response) => {
   const {
     nome,
@@ -71,6 +72,7 @@ export const createSala = async (req: Request, res: Response) => {
   res.status(201).json(sala);
 };
 
+// Atualiza sala
 export const updateSala = async (req: Request, res: Response) => {
   const { id } = req.params;
   const { nome, disponibilidade, capacidade, variacao_capacidade } = req.body;
@@ -93,6 +95,7 @@ export const updateSala = async (req: Request, res: Response) => {
   res.json(sala);
 };
 
+// Deleta (inativa) sala
 export const deleteSala = async (req: Request, res: Response) => {
   const { id } = req.params;
   await prisma.sala.update({

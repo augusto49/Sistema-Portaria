@@ -3,6 +3,7 @@ import api from "@/lib/api";
 import { Sala, SalaResponsavel } from "@/types/database";
 import { toast } from "@/hooks/use-toast";
 
+// Hook para Gerenciar Salas
 export const useSalas = () => {
   return useQuery({
     queryKey: ["salas"],
@@ -13,6 +14,7 @@ export const useSalas = () => {
   });
 };
 
+// Hook para Obter Sala por ID
 export const useSalaById = (id: number | undefined) => {
   return useQuery({
     queryKey: ["sala", id],
@@ -25,6 +27,7 @@ export const useSalaById = (id: number | undefined) => {
   });
 };
 
+// Hook para Criar Sala
 export const useCreateSala = () => {
   const queryClient = useQueryClient();
 
@@ -57,6 +60,7 @@ export const useCreateSala = () => {
   });
 };
 
+// Hook para Atualizar Sala
 export const useUpdateSala = () => {
   const queryClient = useQueryClient();
 
@@ -93,6 +97,7 @@ export const useUpdateSala = () => {
   });
 };
 
+// Hook para Excluir Sala
 export const useDeleteSala = () => {
   const queryClient = useQueryClient();
 
@@ -117,6 +122,7 @@ export const useDeleteSala = () => {
   });
 };
 
+// Hook para Obter Responsáveis de uma Sala
 export const useResponsaveis = (salaId: number | undefined) => {
   return useQuery({
     queryKey: ["responsaveis", salaId],
@@ -131,6 +137,7 @@ export const useResponsaveis = (salaId: number | undefined) => {
   });
 };
 
+// Hook para Criar Responsável para uma Sala
 export const useCreateResponsavel = () => {
   const queryClient = useQueryClient();
 

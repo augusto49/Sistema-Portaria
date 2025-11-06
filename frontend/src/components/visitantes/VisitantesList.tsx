@@ -45,6 +45,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 
+// Componente para Listar e Gerenciar Visitantes
 export default function VisitantesList() {
   const [searchTerm, setSearchTerm] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);

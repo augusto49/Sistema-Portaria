@@ -244,7 +244,7 @@ export default function VisitanteForm({
         possuiDeficiencia: data.possui_deficiencia,
       };
 
-      // Se está editando um visitante específico (prop visitante existe)
+      // Se está editando um visitante específico
       if (visitante) {
         await updateVisitante.mutateAsync({
           id: visitante.id,

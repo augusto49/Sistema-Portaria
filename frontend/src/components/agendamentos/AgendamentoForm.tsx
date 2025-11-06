@@ -36,7 +36,7 @@ import VisitanteAutocomplete from "./VisitanteAutocomplete";
 import SalaSelect from "./SalaSelect";
 import HorariosDisponiveis from "./HorariosDisponiveis";
 
-// FORMULÁRIO DE AGENDAMENTO (4 PASSOS)
+// FORMULÁRIO DE AGENDAMENTO
 
 const formSchema = z.object({
   visitante_id: z.number({ required_error: "Selecione um visitante" }),
@@ -269,7 +269,7 @@ export default function AgendamentoForm({
               }
             }}
           >
-            {/* Passo 1: Visitante */}
+            {/* Visitante */}
             <FormField
               control={form.control}
               name="visitante_id"
@@ -287,7 +287,7 @@ export default function AgendamentoForm({
               )}
             />
 
-            {/* Passo 2: Sala */}
+            {/* Sala */}
             <FormField
               control={form.control}
               name="sala_id"
@@ -310,7 +310,7 @@ export default function AgendamentoForm({
               )}
             />
 
-            {/* Passo 3: Data */}
+            {/* Data */}
             <FormField
               control={form.control}
               name="data"
@@ -355,7 +355,7 @@ export default function AgendamentoForm({
               )}
             />
 
-            {/* Passo 4: Horários */}
+            {/* Horários */}
             {form.watch("sala_id") && form.watch("data") && (
               <div className="space-y-2">
                 <FormLabel>4. Horários *</FormLabel>

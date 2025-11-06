@@ -3,6 +3,7 @@ import api from "@/lib/api";
 import { Feriado } from "@/types/database";
 import { toast } from "@/hooks/use-toast";
 
+// Hook para Obter Todos os Feriados
 export const useFeriados = () => {
   return useQuery({
     queryKey: ["feriados"],
@@ -13,6 +14,7 @@ export const useFeriados = () => {
   });
 };
 
+// Hook para Obter Feriados por Período
 export const useFeriadosByPeriodo = (inicio?: string, fim?: string) => {
   return useQuery({
     queryKey: ["feriados", "periodo", inicio, fim],
@@ -27,6 +29,7 @@ export const useFeriadosByPeriodo = (inicio?: string, fim?: string) => {
   });
 };
 
+// Hook para Obter Feriado por ID
 export const useCreateFeriado = () => {
   const queryClient = useQueryClient();
 
@@ -54,6 +57,7 @@ export const useCreateFeriado = () => {
   });
 };
 
+// Hook para Atualizar Feriado
 export const useUpdateFeriado = () => {
   const queryClient = useQueryClient();
 
@@ -82,6 +86,7 @@ export const useUpdateFeriado = () => {
   });
 };
 
+// Hook para Excluir Feriado
 export const useDeleteFeriado = () => {
   const queryClient = useQueryClient();
 
