@@ -426,6 +426,131 @@ Cadastro de feriados
 
 ## 📁 Estrutura do Projeto
 
+```
+├── backend
+│   ├── prisma
+│   │   ├── migrations
+│   │   │   ├── 20251105230807_
+│   │   │   │   └── migration.sql
+│   │   │   └── migration_lock.toml
+│   │   ├── schema.prisma
+│   │   └── seed.ts
+│   ├── src
+│   │   ├── controllers
+│   │   │   ├── acesso.controller.ts
+│   │   │   ├── agendamento.controller.ts
+│   │   │   ├── feriado.controller.ts
+│   │   │   ├── sala.controller.ts
+│   │   │   └── visitante.controller.ts
+│   │   ├── middleware
+│   │   │   └── errorHandler.ts
+│   │   ├── routes
+│   │   │   ├── acesso.routes.ts
+│   │   │   ├── agendamento.routes.ts
+│   │   │   ├── feriado.routes.ts
+│   │   │   ├── index.ts
+│   │   │   ├── sala.routes.ts
+│   │   │   └── visitante.routes.ts
+│   │   ├── services
+│   │   │   ├── horarios.service.ts
+│   │   │   ├── prioridade.service.ts
+│   │   │   └── validacao.service.ts
+│   │   ├── types
+│   │   │   └── database.types.ts
+│   │   ├── utils
+│   │   │   ├── dateUtils.ts
+│   │   │   └── prisma.ts
+│   │   └── server.ts
+│   ├── README.md
+│   ├── nodemon.json
+│   ├── package-lock.json
+│   ├── package.json
+│   └── tsconfig.json
+├── frontend
+│   ├── public
+│   │   ├── placeholder.svg
+│   │   ├── robots.txt
+│   │   └── vite.svg
+│   ├── src
+│   │   ├── components
+│   │   │   ├── agendamentos
+│   │   │   │   ├── AgendamentoForm.tsx
+│   │   │   │   ├── AgendamentosList.tsx
+│   │   │   │   ├── HorariosDisponiveis.tsx
+│   │   │   │   ├── SalaSelect.tsx
+│   │   │   │   └── VisitanteAutocomplete.tsx
+│   │   │   ├── common
+│   │   │   │   ├── PriorityBadge.tsx
+│   │   │   │   └── StatusBadge.tsx
+│   │   │   ├── feriados
+│   │   │   │   ├── FeriadoForm.tsx
+│   │   │   │   └── FeriadosList.tsx
+│   │   │   ├── historico
+│   │   │   │   ├── AcessosAtivosComRegistro.tsx
+│   │   │   │   ├── HistoricoCompleto.tsx
+│   │   │   │   ├── RegistroAcessoForm.tsx
+│   │   │   │   └── RegistroSaidaForm.tsx
+│   │   │   ├── layout
+│   │   │   │   ├── Layout.tsx
+│   │   │   │   └── Navbar.tsx
+│   │   │   ├── salas
+│   │   │   │   ├── HistoricoSala.tsx
+│   │   │   │   ├── HorariosPorDia.tsx
+│   │   │   │   ├── ResponsavelHistorico.tsx
+│   │   │   │   ├── SalaForm.tsx
+│   │   │   │   └── SalasList.tsx
+│   │   │   ├── ui
+│   │   │   └── visitantes
+│   │   │       ├── HistoricoVisitante.tsx
+│   │   │       ├── VisitanteForm.tsx
+│   │   │       └── VisitantesList.tsx
+│   │   ├── hooks
+│   │   │   ├── use-mobile.tsx
+│   │   │   ├── use-toast.ts
+│   │   │   ├── useAcessos.ts
+│   │   │   ├── useAgendamentos.ts
+│   │   │   ├── useFeriados.ts
+│   │   │   ├── useSalas.ts
+│   │   │   └── useVisitantes.ts
+│   │   ├── lib
+│   │   │   ├── api.ts
+│   │   │   ├── constants.ts
+│   │   │   ├── date.ts
+│   │   │   └── utils.ts
+│   │   ├── pages
+│   │   │   ├── Agendamentos.tsx
+│   │   │   ├── Feriados.tsx
+│   │   │   ├── Historico.tsx
+│   │   │   ├── Index.tsx
+│   │   │   ├── NotFound.tsx
+│   │   │   ├── Salas.tsx
+│   │   │   └── Visitantes.tsx
+│   │   ├── types
+│   │   │   └── database.ts
+│   │   ├── App.css
+│   │   ├── App.tsx
+│   │   ├── index.css
+│   │   ├── main.tsx
+│   │   └── vite-env.d.ts
+│   ├── .gitignore
+│   ├── README.md
+│   ├── bun.lockb
+│   ├── components.json
+│   ├── docker-compose.yml
+│   ├── eslint.config.js
+│   ├── index.html
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── postcss.config.js
+│   ├── tailwind.config.ts
+│   ├── tsconfig.app.json
+│   ├── tsconfig.json
+│   ├── tsconfig.node.json
+│   └── vite.config.ts
+├── .gitignore
+└── README.md
+```
+
 ## 📄 Licença
 
 Este projeto está sob a licença MIT.
