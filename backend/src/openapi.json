@@ -1,0 +1,623 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Sistema de Portaria API",
+    "version": "1.0.0",
+    "description": "API documentation for Sistema de Portaria"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3001/api",
+      "description": "Local server"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "Visitante": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "example": 1 },
+          "nome": { "type": "string", "example": "João Silva" },
+          "cpf": { "type": "string", "example": "12345678901" },
+          "rg": { "type": "string", "nullable": true, "example": "12345678" },
+          "data_nascimento": {
+            "type": "string",
+            "format": "date",
+            "example": "1990-01-01"
+          },
+          "tipo_prioridade_id": { "type": "integer", "example": 1 },
+          "foto": {
+            "type": "string",
+            "nullable": true,
+            "description": "Base64 string or URL"
+          },
+          "ativo": { "type": "boolean", "example": true },
+          "criado_em": { "type": "string", "format": "date-time" }
+        }
+      },
+      "VisitanteInput": {
+        "type": "object",
+        "required": ["nome", "cpf", "data_nascimento"],
+        "properties": {
+          "nome": { "type": "string" },
+          "cpf": { "type": "string" },
+          "rg": { "type": "string" },
+          "data_nascimento": { "type": "string", "format": "date" },
+          "possui_deficiencia": { "type": "boolean", "default": false },
+          "foto": { "type": "string" }
+        }
+      },
+      "Sala": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "example": 1 },
+          "nome": { "type": "string", "example": "Sala de Reunião 1" },
+          "capacidade": { "type": "integer", "example": 10 },
+          "variacao_capacidade": { "type": "integer", "example": 2 },
+          "disponibilidade": { "type": "object", "example": {} },
+          "ativo": { "type": "boolean", "example": true }
+        }
+      },
+      "SalaInput": {
+        "type": "object",
+        "required": ["nome", "capacidade"],
+        "properties": {
+          "nome": { "type": "string" },
+          "capacidade": { "type": "integer" },
+          "variacao_capacidade": { "type": "integer" },
+          "disponibilidade": { "type": "object" },
+          "responsavel_nome": { "type": "string" },
+          "responsavel_valido_de": { "type": "string", "format": "date" }
+        }
+      },
+      "SalaResponsavel": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "sala_id": { "type": "integer" },
+          "nome": { "type": "string" },
+          "valido_de": { "type": "string", "format": "date" },
+          "valido_ate": { "type": "string", "format": "date", "nullable": true }
+        }
+      },
+      "Agendamento": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "example": 1 },
+          "visitante_id": { "type": "integer" },
+          "sala_id": { "type": "integer" },
+          "data_agendada": { "type": "string", "format": "date-time" },
+          "hora_fim": { "type": "string", "format": "date-time" },
+          "status": {
+            "type": "integer",
+            "description": "1: Pendente, 2: Confirmado, 3: Cancelado"
+          },
+          "ativo": { "type": "boolean" }
+        }
+      },
+      "AgendamentoInput": {
+        "type": "object",
+        "required": ["visitante_id", "sala_id", "data_agendada", "hora_fim"],
+        "properties": {
+          "visitante_id": { "type": "integer" },
+          "sala_id": { "type": "integer" },
+          "data_agendada": { "type": "string", "format": "date-time" },
+          "hora_fim": { "type": "string", "format": "date-time" }
+        }
+      },
+      "Acesso": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "example": 1 },
+          "visitante_id": { "type": "integer" },
+          "sala_id": { "type": "integer" },
+          "agendamento_id": { "type": "integer", "nullable": true },
+          "entrada_em": { "type": "string", "format": "date-time" },
+          "saida_em": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "ativo": { "type": "boolean" }
+        }
+      },
+      "AcessoInput": {
+        "type": "object",
+        "required": ["visitante_id", "sala_id"],
+        "properties": {
+          "visitante_id": { "type": "integer" },
+          "sala_id": { "type": "integer" },
+          "agendamento_id": { "type": "integer" },
+          "entrada_em": { "type": "string", "format": "date-time" }
+        }
+      },
+      "Feriado": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "data": { "type": "string", "format": "date" },
+          "descricao": { "type": "string" },
+          "tipo": { "type": "integer" },
+          "ativo": { "type": "boolean" }
+        }
+      },
+      "FeriadoInput": {
+        "type": "object",
+        "required": ["data", "descricao", "tipo"],
+        "properties": {
+          "data": { "type": "string", "format": "date" },
+          "descricao": { "type": "string" },
+          "tipo": { "type": "integer" }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Health Check",
+        "tags": ["System"],
+        "responses": {
+          "200": { "description": "Server is healthy" }
+        }
+      }
+    },
+    "/visitantes": {
+      "get": {
+        "summary": "Listar Visitantes",
+        "tags": ["Visitantes"],
+        "responses": {
+          "200": {
+            "description": "Lista de visitantes ativos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Visitante" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Criar Visitante",
+        "tags": ["Visitantes"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/VisitanteInput" }
+            }
+          }
+        },
+        "responses": { "201": { "description": "Visitante criado" } }
+      }
+    },
+    "/visitantes/cpf/{cpf}": {
+      "get": {
+        "summary": "Buscar Visitante por CPF",
+        "tags": ["Visitantes"],
+        "parameters": [
+          {
+            "name": "cpf",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dados do visitante",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Visitante" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/visitantes/{id}": {
+      "put": {
+        "summary": "Atualizar Visitante",
+        "tags": ["Visitantes"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/VisitanteInput" }
+            }
+          }
+        },
+        "responses": { "200": { "description": "Visitante atualizado" } }
+      },
+      "delete": {
+        "summary": "Remover Visitante",
+        "tags": ["Visitantes"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": { "204": { "description": "Visitante removido" } }
+      }
+    },
+    "/salas": {
+      "get": {
+        "summary": "Listar Salas",
+        "tags": ["Salas"],
+        "responses": {
+          "200": {
+            "description": "Lista de salas",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Sala" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Criar Sala",
+        "tags": ["Salas"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/SalaInput" }
+            }
+          }
+        },
+        "responses": { "201": { "description": "Sala criada" } }
+      }
+    },
+    "/salas/{id}": {
+      "get": {
+        "summary": "Obter Sala",
+        "tags": ["Salas"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dados da sala",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Sala" }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Atualizar Sala",
+        "tags": ["Salas"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/SalaInput" }
+            }
+          }
+        },
+        "responses": { "200": { "description": "Sala atualizada" } }
+      },
+      "delete": {
+        "summary": "Remover Sala",
+        "tags": ["Salas"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": { "204": { "description": "Sala removida" } }
+      }
+    },
+    "/salas/{salaId}/responsaveis": {
+      "get": {
+        "summary": "Listar Responsáveis da Sala",
+        "tags": ["Salas"],
+        "parameters": [
+          {
+            "name": "salaId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de responsáveis",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/SalaResponsavel" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/agendamentos": {
+      "get": {
+        "summary": "Listar Agendamentos",
+        "tags": ["Agendamentos"],
+        "responses": {
+          "200": {
+            "description": "Lista de agendamentos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Agendamento" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Criar Agendamento",
+        "tags": ["Agendamentos"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/AgendamentoInput" }
+            }
+          }
+        },
+        "responses": { "201": { "description": "Agendamento criado" } }
+      }
+    },
+    "/agendamentos/{id}": {
+      "put": {
+        "summary": "Atualizar Agendamento",
+        "tags": ["Agendamentos"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/AgendamentoInput" }
+            }
+          }
+        },
+        "responses": { "200": { "description": "Agendamento atualizado" } }
+      }
+    },
+    "/agendamentos/{id}/cancelar": {
+      "put": {
+        "summary": "Cancelar Agendamento",
+        "tags": ["Agendamentos"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": { "200": { "description": "Agendamento cancelado" } }
+      }
+    },
+    "/agendamentos/pendentes": {
+      "get": {
+        "summary": "Listar Agendamentos Pendentes",
+        "tags": ["Agendamentos"],
+        "responses": {
+          "200": {
+            "description": "Lista de agendamentos pendentes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Agendamento" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/agendamentos/horarios-disponiveis": {
+      "post": {
+        "summary": "Buscar Horários Disponíveis",
+        "tags": ["Agendamentos"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["salaId", "data"],
+                "properties": {
+                  "salaId": { "type": "integer" },
+                  "data": { "type": "string", "format": "date" }
+                }
+              }
+            }
+          }
+        },
+        "responses": { "200": { "description": "Horários disponíveis" } }
+      }
+    },
+    "/acessos": {
+      "get": {
+        "summary": "Listar Acessos",
+        "tags": ["Acessos"],
+        "responses": {
+          "200": {
+            "description": "Lista de acessos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Acesso" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Registrar Entrada",
+        "tags": ["Acessos"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/AcessoInput" }
+            }
+          }
+        },
+        "responses": { "201": { "description": "Entrada registrada" } }
+      }
+    },
+    "/acessos/ativos": {
+      "get": {
+        "summary": "Listar Acessos Ativos",
+        "tags": ["Acessos"],
+        "description": "Visitantes que ainda não saíram",
+        "responses": {
+          "200": {
+            "description": "Lista de acessos ativos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Acesso" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/acessos/{id}/saida": {
+      "put": {
+        "summary": "Registrar Saída",
+        "tags": ["Acessos"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "saida_em": { "type": "string", "format": "date-time" }
+                }
+              }
+            }
+          }
+        },
+        "responses": { "200": { "description": "Saída registrada" } }
+      }
+    },
+    "/feriados": {
+      "get": {
+        "summary": "Listar Feriados",
+        "tags": ["Feriados"],
+        "responses": {
+          "200": {
+            "description": "Lista de feriados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Feriado" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Criar Feriado",
+        "tags": ["Feriados"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/FeriadoInput" }
+            }
+          }
+        },
+        "responses": { "201": { "description": "Feriado criado" } }
+      }
+    },
+    "/feriados/{id}": {
+      "put": {
+        "summary": "Atualizar Feriado",
+        "tags": ["Feriados"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/FeriadoInput" }
+            }
+          }
+        },
+        "responses": { "200": { "description": "Feriado atualizado" } }
+      },
+      "delete": {
+        "summary": "Remover Feriado",
+        "tags": ["Feriados"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": { "204": { "description": "Feriado removido" } }
+      }
+    }
+  }
+}

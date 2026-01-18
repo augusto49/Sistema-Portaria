@@ -1,157 +1,88 @@
-# Backend - Sistema de Agendamento
+# ⚙️ Sistema de Portaria - Backend
 
-Backend Node.js + Express + Prisma + PostgreSQL para sistema de agendamento de visitantes.
+> **Núcleo da aplicação de gestão de visitantes.**  
+> API RESTful robusta, segura e documentada.
 
-## 🚀 Tecnologias
+<div align="center">
 
-- Node.js 18+
-- Express 4
-- Prisma ORM 5
-- PostgreSQL 15
-- TypeScript 5
+[![Node.js](https://img.shields.io/badge/Node.js-18+-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![Prisma](https://img.shields.io/badge/Prisma-5-2D3748?style=for-the-badge&logo=prisma&logoColor=white)](https://www.prisma.io/)
 
-## 📦 Instalação
+[**Documentação API**](http://localhost:3001/docs) • [**Prisma Studio**](http://localhost:5555)
+
+</div>
+
+---
+
+## ⚡ Quick Start
+
+### 1. Configuração
 
 ```bash
-cd backend
+# Instale as dependências
 npm install
+
+# Configure o ambiente
+cp .env.example .env
+# Edite .env com sua DATABASE_URL
 ```
 
-## ⚙️ Configuração
-
-1. **Variáveis de Ambiente**
-
-Configure `.env`:
-
-```env
-DATABASE_URL="postgresql://postgres:postgres@localhost:5432/portaria"
-PORT=3001
-NODE_ENV=development
-```
-
-2. **Executar Migrations**
+### 2. Banco de Dados
 
 ```bash
-npm run prisma:generate
-npm run prisma:migrate
-npm run prisma:seed
+# Cria as tabelas
+npx prisma migrate dev
+
+# Popula dados iniciais (Prioridades, Salas)
+npx prisma db seed
 ```
 
-## 🏃 Execução
-
-**Desenvolvimento:**
+### 3. Execução
 
 ```bash
+# Modo desenvolvimento (Watch mode)
 npm run dev
-```
 
-**Produção:**
-
-```bash
+# Modo produção
 npm run build
 npm start
 ```
 
-**Prisma Studio (GUI para banco):**
+---
 
-```bash
-npm run prisma:studio
+## 📖 Documentação (Scalar)
+
+Acesse **`/docs`** para documentação interativa.
+
+| Recurso           | Descrição                            |
+| :---------------- | :----------------------------------- |
+| **`/docs`**       | Swagger/OpenAPI Iterativo (Scalar)   |
+| **`/api`**        | Base URL da API                      |
+| **Prisma Studio** | `npx prisma studio` para ver o banco |
+
+---
+
+## 🛠️ Scripts Disponíveis
+
+| Comando                    | Descrição                                   |
+| :------------------------- | :------------------------------------------ |
+| `npm run dev`              | Inicia servidor de desenvolvimento          |
+| `npm run build`            | Compila TypeScript para JS em `/dist`       |
+| `npm start`                | Roda o código compilado                     |
+| `npx prisma studio`        | Interface visual para o Banco de Dados      |
+| `npx prisma migrate reset` | **CUIDADO**: Apaga e recria o banco do zero |
+
+---
+
+## 📂 Estrutura Chave
+
 ```
-
-## 📡 Endpoints da API
-
-### Visitantes
-
-- `GET /api/visitantes` - Listar todos
-- `GET /api/visitantes/cpf/:cpf` - Buscar por CPF
-- `POST /api/visitantes` - Criar visitante
-- `PUT /api/visitantes/:id` - Atualizar visitante
-- `DELETE /api/visitantes/:id` - Excluir visitante
-- `POST /api/visitantes/calcular-prioridade` - Calcular prioridade
-
-### Salas
-
-- `GET /api/salas` - Listar todas
-- `GET /api/salas/:id` - Buscar por ID
-- `POST /api/salas` - Criar sala
-- `PUT /api/salas/:id` - Atualizar sala
-- `DELETE /api/salas/:id` - Excluir sala
-- `GET /api/salas/:salaId/responsaveis` - Listar responsáveis
-- `POST /api/salas/responsaveis` - Criar responsável
-
-### Agendamentos
-
-- `GET /api/agendamentos` - Listar todos
-- `GET /api/agendamentos/visitante/:visitanteId` - Por visitante
-- `GET /api/agendamentos/sala/:salaId` - Por sala
-- `GET /api/agendamentos/data?dataInicio=&dataFim=` - Por período
-- `GET /api/agendamentos/pendentes` - Listar pendentes
-- `POST /api/agendamentos` - Criar agendamento
-- `PUT /api/agendamentos/:id` - Atualizar agendamento
-- `PUT /api/agendamentos/:id/cancelar` - Cancelar agendamento
-- `POST /api/agendamentos/validar` - Validar agendamento
-- `POST /api/agendamentos/horarios-disponiveis` - Buscar horários
-
-### Acessos
-
-- `GET /api/acessos` - Listar todos
-- `GET /api/acessos/visitante/:visitanteId` - Por visitante
-- `GET /api/acessos/sala/:salaId` - Por sala
-- `GET /api/acessos/periodo?dataInicio=&dataFim=` - Por período
-- `GET /api/acessos/ativos` - Acessos ativos
-- `GET /api/acessos/agendamento/:agendamentoId` - Por agendamento
-- `POST /api/acessos` - Registrar entrada
-- `PUT /api/acessos/:id/saida` - Registrar saída
-
-### Feriados
-
-- `GET /api/feriados` - Listar todos
-- `GET /api/feriados/periodo?inicio=&fim=` - Por período
-- `POST /api/feriados` - Criar feriado
-- `PUT /api/feriados/:id` - Atualizar feriado
-- `DELETE /api/feriados/:id` - Excluir feriado
-
-## 🗄️ Estrutura do Banco
-
-### Tabelas
-
-- `tipo_prioridade` - Tipos de prioridade (Normal, Idoso, PCD, etc.)
-- `visitante` - Dados dos visitantes
-- `sala` - Salas disponíveis para agendamento
-- `sala_responsavel` - Histórico de responsáveis por sala
-- `feriado` - Feriados cadastrados
-- `agendamento` - Agendamentos realizados
-- `acesso` - Registro de entrada/saída
-
-### Relacionamentos
-
-- Visitante → TipoPrioridade (N:1)
-- Sala → SalaResponsavel (1:N)
-- Agendamento → Visitante (N:1)
-- Agendamento → Sala (N:1)
-- Acesso → Visitante (N:1)
-- Acesso → Sala (N:1)
-- Acesso → Agendamento (N:1)
-
-## 🔧 Scripts Úteis
-
-```bash
-# Resetar banco de dados
-npx prisma migrate reset
-
-# Ver SQL das migrations
-npx prisma migrate diff
-
-# Formatar schema
-npx prisma format
-
-# Validar schema
-npx prisma validate
+src/
+├── controllers/ # Lógica de entrada (Req/Res)
+├── services/    # Regras de Negócio (Validações, Cálculos)
+├── routes/      # Definição de Endpoints
+├── prisma/      # Schema do Banco e Seeds
+└── server.ts    # Entry Point
 ```
-
-## 📝 Notas
-
-- Soft delete: Registros marcados como `ativo: false` ao invés de excluídos
-- JSONB: Campo `disponibilidade` em `sala` armazena horários por dia da semana
-- Timestamps: Todos os registros possuem `criado_em`
-- Validações: Implementadas em services e controllers
